@@ -16,8 +16,22 @@ export const AlertBox: React.FC<AlertBoxProps> =({
     };
 
     return(
-        <div>
-            
+        <div className={`p-4 border-l-4 rounded ${alertStyle[type]}`}>
+            <div className="flex justify-between items-center">
+                <p className="font-medium">{message}</p>
+                {onClose && (
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="ml-4 text-gray-500 hover:text-gray-800 text-lg font-bold"
+                    >
+                        x
+                    </button>
+                )}
+
+            </div>
+            {children && <div className="mt-2">{children}</div>}
+
         </div>
-    )
-}
+    );
+};
