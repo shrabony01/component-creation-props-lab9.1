@@ -1,122 +1,77 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import { AlertBox } from './components/AlertBox/AlertBox';
+import { UserProfileCard } from './components/UserProfileCard/UserProfileCard';
+import { ProductDisplay } from './components/ProductDisplay/ProductDisplay';
+import type { User, Product } from './types';
 
-function App() {
-  const [count, setCount] = useState(0)
+const sampleUser: User = {
+  id: '1',
+  name: 'John Doe',
+  email: 'john.doe@example.com',
+  role: 'Software Engineer',
+  avatarUrl: 'https://cdn.vectorstock.com/i/1000v/44/88/simple-male-avatar-icon-vector-58404488.jpg',
+};
+
+const sampleProduct: Product = {
+  id: '101',
+  name: 'Wireless Headphones',
+  price: 199.99,
+  description: 'High-quality wireless headphones with active noise cancellation.',
+  imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400',
+  inStock: true,
+};
+
+export default function App() {
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+
+  const handleEdit = (userId: string) => {
+    setAlertMessage(`Editing user ID: ${userId}`);
+    setShowAlert(true);
+  };
+
+  const handleAddToCart = (productId: string) => {
+    setAlertMessage(`Added product ${productId} to cart!`);
+    setShowAlert(true);
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div style={{ maxWidth: '850px', margin: '40px auto', padding: '0 16px', fontFamily: 'sans-serif' }}>
+      <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>
+        Internal Component Library
+      </h1>
+
+      {showAlert && (
+        <div style={{ marginBottom: '20px' }}>
+          <AlertBox
+            type="success"
+            message={alertMessage}
+            onClose={() => setShowAlert(false)}
+          >
+            <p style={{ fontSize: '12px', marginTop: '4px' }}>Action processed successfully.</p>
+          </AlertBox>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
+      )}
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+        <UserProfileCard
+          user={sampleUser}
+          showEmail={true}
+          showRole={true}
+          onEdit={handleEdit}
         >
-          Count is {count}
-        </button>
-      </section>
+          <p style={{ fontSize: '12px', color: '#6b7280' }}>Last login: 2 hours ago</p>
+        </UserProfileCard>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        <ProductDisplay
+          product={sampleProduct}
+          showDescription={true}
+          showStockStatus={true}
+          onAddToCart={handleAddToCart}
+        >
+          <p style={{ fontSize: '12px', color: '#6b7280' }}>Free standard shipping available</p>
+        </ProductDisplay>
+      </div>
+    </div>
+  );
 }
-
-export default App
